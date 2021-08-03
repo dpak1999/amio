@@ -3,7 +3,7 @@
 import React from "react";
 import { FooterMessage, HeaderMessage } from "../common/WelcomeMessage";
 
-const Login = () => {
+const Signup = () => {
   return (
     <>
       <HeaderMessage />
@@ -12,4 +12,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
