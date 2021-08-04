@@ -1,10 +1,12 @@
 /** @format */
 
-import React, { useState } from "react";
-import { Form, Message, Segment } from "semantic-ui-react";
+import React, { useEffect, useState } from "react";
+import { Button, Divider, Form, Message, Segment } from "semantic-ui-react";
+import Inputs from "../common/Inputs";
 import { FooterMessage, HeaderMessage } from "../common/WelcomeMessage";
 
 const Signup = () => {
+  const regexUserName = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -23,6 +25,7 @@ const Signup = () => {
   const [usernameLoading, setUsernameLoading] = useState(false);
   const [usernameAvailable, setUsernameAvailable] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
+  const [submitDisabled, setSubmitDisabled] = useState(true);
 
   const { name, email, password, bio } = user;
 
@@ -32,6 +35,14 @@ const Signup = () => {
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
   };
+
+  useEffect(() => {
+    const isUser = Object.values({ name, email, password, bio }).every((item) =>
+      Boolean(item)
+    );
+
+    isUser ? setSubmitDisabled(false) : setSubmitDisabled(true);
+  }, [user]);
 
   return (
     <>
@@ -91,6 +102,43 @@ const Signup = () => {
             iconPosition="left"
             type={showPassword ? "text" : "password"}
             required
+          />
+
+          <Form.Input
+            label="Username"
+            placeholder="Enter your username"
+            name="username"
+            value={username}
+            onChange={(e) => {
+              setUsername(e.target.value);
+              if (regexUserName.test(e.target.value)) {
+                setUsernameAvailable(true);
+              } else {
+                setUsernameAvailable(false);
+              }
+            }}
+            loading={usernameLoading}
+            error={!usernameAvailable}
+            fluid
+            icon={usernameAvailable ? "check" : "close"}
+            iconPosition="left"
+            required
+          />
+
+          <Inputs
+            user={user}
+            showSocialLinks={socialLinks}
+            setShowSocialLinks={setSocialLinks}
+            handleChange={handleChange}
+          />
+
+          <Divider hidden />
+
+          <Button
+            content="Signup"
+            type="submit"
+            color="orange"
+            disabled={submitDisabled || !usernameAvailable}
           />
         </Segment>
       </Form>
