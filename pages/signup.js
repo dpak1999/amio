@@ -1,7 +1,8 @@
 /** @format */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Divider, Form, Message, Segment } from "semantic-ui-react";
+import ImageContainer from "../common/ImageContainer";
 import Inputs from "../common/Inputs";
 import { FooterMessage, HeaderMessage } from "../common/WelcomeMessage";
 
@@ -26,13 +27,22 @@ const Signup = () => {
   const [usernameAvailable, setUsernameAvailable] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [submitDisabled, setSubmitDisabled] = useState(true);
+  const [media, setMedia] = useState(null);
+  const [mediaPreview, setMediaPreview] = useState(null);
+  const [highlighted, setHighlighted] = useState(false);
+  const inputRef = useRef();
 
   const { name, email, password, bio } = user;
 
   const handleSubmit = (e) => {};
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, files } = e.target;
+
+    if (name === "media") {
+      setMedia(files[0]);
+      setMediaPreview(URL.createObjectURL(files[0]));
+    }
     setUser((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -60,6 +70,16 @@ const Signup = () => {
         />
 
         <Segment>
+          <ImageContainer
+            mediaPreview={mediaPreview}
+            setMediaPreview={setMediaPreview}
+            setMedia={setMedia}
+            inputRef={inputRef}
+            highlighted={highlighted}
+            setHighlighted={setHighlighted}
+            handleChange={handleChange}
+          />
+
           <Form.Input
             label="Name"
             placeholder="Enter your name"
