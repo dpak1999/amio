@@ -155,6 +155,7 @@ const Signup = () => {
           <Divider hidden />
 
           <Button
+            icon="signup"
             content="Signup"
             type="submit"
             color="orange"
