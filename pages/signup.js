@@ -1,12 +1,17 @@
 /** @format */
 
+import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Divider, Form, Message, Segment } from "semantic-ui-react";
 import ImageContainer from "../common/ImageContainer";
 import Inputs from "../common/Inputs";
 import { FooterMessage, HeaderMessage } from "../common/WelcomeMessage";
+import { registerUser } from "../utils/authUser";
+import baseUrl from "../utils/baseUrl";
+import uploadPic from "../utils/uploadPicToCloudinary";
 
 const Signup = () => {
+  let cancel;
   const regexUserName = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
   const [user, setUser] = useState({
     name: "",
@@ -34,7 +39,21 @@ const Signup = () => {
 
   const { name, email, password, bio } = user;
 
-  const handleSubmit = (e) => {};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormLoading(true);
+    let profilePicUrl;
+    if (media !== null) {
+      profilePicUrl = await uploadPic(media);
+    }
+    if (media !== null && !profilePicUrl) {
+      setFormLoading(false);
+      return setErrorMessage("Error uploading Image");
+    }
+
+    await registerUser(user, profilePicUrl, setErrorMessage);
+    setFormLoading(false);
+  };
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -46,6 +65,26 @@ const Signup = () => {
     setUser((prev) => ({ ...prev, [name]: value }));
   };
 
+  const checkUsername = async () => {
+    setUsernameLoading(true);
+    try {
+      cancel && cancel();
+      const cancelToken = axios.CancelToken;
+      const res = await axios.get(`${baseUrl}/api/signup/${username}`, {
+        cancelToken: new cancelToken((canceler) => {
+          cancel = canceler;
+        }),
+      });
+      if (res.data === "Username Available") {
+        setUsernameAvailable(true);
+        setUser((prev) => ({ ...prev, username }));
+      }
+    } catch (error) {
+      setErrorMessage("Username not available");
+    }
+    setUsernameLoading(false);
+  };
+
   useEffect(() => {
     const isUser = Object.values({ name, email, password, bio }).every((item) =>
       Boolean(item)
@@ -53,6 +92,10 @@ const Signup = () => {
 
     isUser ? setSubmitDisabled(false) : setSubmitDisabled(true);
   }, [user]);
+
+  useEffect(() => {
+    username === "" ? setUsernameAvailable(false) : checkUsername();
+  }, [username]);
 
   return (
     <>
