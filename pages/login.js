@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Divider, Form, Message, Segment } from "semantic-ui-react";
 import { FooterMessage, HeaderMessage } from "../common/WelcomeMessage";
+import { loginUser } from "../utils/authUser";
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -22,8 +23,9 @@ const Login = () => {
     setUser((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    await loginUser(user, setErrorMessage, setFormLoading);
   };
 
   useEffect(() => {

@@ -75,12 +75,16 @@ const Signup = () => {
           cancel = canceler;
         }),
       });
+
+      if (errorMessage !== null) setErrorMessage(null);
+
       if (res.data === "Username Available") {
         setUsernameAvailable(true);
         setUser((prev) => ({ ...prev, username }));
       }
     } catch (error) {
       setErrorMessage("Username not available");
+      setUsernameAvailable(false);
     }
     setUsernameLoading(false);
   };
