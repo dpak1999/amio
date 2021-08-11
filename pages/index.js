@@ -2,7 +2,8 @@
 
 import React from "react";
 
-const Index = () => {
+const Index = ({ user, userFollowerStats }) => {
+  console.log(user, userFollowerStats);
   return <div>Homepage</div>;
 };
 
