@@ -2,7 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import { Button, Divider, Form, Message, Segment } from "semantic-ui-react";
-import { FooterMessage, HeaderMessage } from "../common/WelcomeMessage";
+import {
+  FooterMessage,
+  HeaderMessage,
+} from "../components/common/WelcomeMessage";
 import { loginUser } from "../utils/authUser";
 
 const Login = () => {

@@ -3,9 +3,12 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Divider, Form, Message, Segment } from "semantic-ui-react";
-import ImageContainer from "../common/ImageContainer";
-import Inputs from "../common/Inputs";
-import { FooterMessage, HeaderMessage } from "../common/WelcomeMessage";
+import ImageContainer from "../components/common/ImageContainer";
+import Inputs from "../components/common/Inputs";
+import {
+  FooterMessage,
+  HeaderMessage,
+} from "../components/common/WelcomeMessage";
 import { registerUser } from "../utils/authUser";
 import baseUrl from "../utils/baseUrl";
 import uploadPic from "../utils/uploadPicToCloudinary";
