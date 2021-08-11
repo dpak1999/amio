@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Button, Divider, Form, Message, Segment } from "semantic-ui-react";
+import cookie from "js-cookie";
 import {
   FooterMessage,
   HeaderMessage,
@@ -38,6 +39,14 @@ const Login = () => {
 
     isUser ? setSubmitDisabled(false) : setSubmitDisabled(true);
   }, [user]);
+
+  useEffect(() => {
+    document.title = "Welcome back";
+    const userEmail = cookie.get("amio-userEmail");
+    if (userEmail) {
+      setUser((prev) => ({ ...prev, email: userEmail }));
+    }
+  }, []);
 
   return (
     <>
