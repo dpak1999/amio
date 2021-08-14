@@ -8,6 +8,7 @@ import { parseCookies } from "nookies";
 import { NoPosts } from "../components/Layout/NoData";
 import CreatePost from "../components/post/Createpost";
 import PostCard from "../components/post/PostCard";
+import { PostDeleteToastr } from "../components/Layout/Toastr";
 
 const Index = ({ user, postsData, errorLoading }) => {
   const [posts, setPosts] = useState(postsData);
@@ -17,22 +18,29 @@ const Index = ({ user, postsData, errorLoading }) => {
     document.title = `Welcome, ${user.name.split(" ")[0]}`;
   }, []);
 
+  useEffect(() => {
+    showToastr && setTimeout(() => setShowToastr(false), 3000);
+  }, [showToastr]);
+
   if (posts.length === 0 || errorLoading) return <NoPosts />;
 
   return (
-    <Segment>
-      <CreatePost user={user} setPosts={setPosts} />
+    <>
+      {showToastr && <PostDeleteToastr />}
+      <Segment>
+        <CreatePost user={user} setPosts={setPosts} />
 
-      {posts.map((post) => (
-        <PostCard
-          key={post.id}
-          post={post}
-          user={user}
-          setPosts={setPosts}
-          setShowToastr={setShowToastr}
-        />
-      ))}
-    </Segment>
+        {posts.map((post) => (
+          <PostCard
+            key={post.id}
+            post={post}
+            user={user}
+            setPosts={setPosts}
+            setShowToastr={setShowToastr}
+          />
+        ))}
+      </Segment>
+    </>
   );
 };
 

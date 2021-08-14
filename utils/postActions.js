@@ -28,3 +28,13 @@ export const submitNewPost = async (
     setError(errMessage);
   }
 };
+
+export const deletePost = async (postId, setPosts, setShowToastr) => {
+  try {
+    await Axios.delete(`/${postId}`);
+    setPosts((prev) => prev.filter((post) => post._id !== postId));
+    setShowToastr(true);
+  } catch (error) {
+    console.error(error);
+  }
+};
