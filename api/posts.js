@@ -24,7 +24,7 @@ router.post("/", authMiddleware, async (req, res) => {
     if (location) newPost.location = location;
     if (picUrl) newPost.picUrl = picUrl;
 
-    const post = await PostModel(newPost).save();
+    const post = await new PostModel(newPost).save();
 
     const postCreated = await PostModel.findById(post._id).populate("user");
 
