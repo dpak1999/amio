@@ -16,6 +16,7 @@ import PostComments from "./PostComments";
 import CommentInputField from "./CommentInputField";
 import calculateTime from "../../utils/calculateTime";
 import { deletePost, likePost } from "../../utils/postActions";
+import LikesLIst from "./LikesLIst";
 
 const PostCard = ({ user, post, setPosts, setShowToastr }) => {
   const [likes, setLikes] = useState(post.likes);
@@ -110,11 +111,16 @@ const PostCard = ({ user, post, setPosts, setShowToastr }) => {
               }
             />
 
-            {likes.length > 0 && (
-              <span className="spanLikesList">{`${likes.length} ${
-                likes.length === 1 ? "like" : "likes"
-              }`}</span>
-            )}
+            <LikesLIst
+              postId={post._id}
+              trigger={
+                likes.length > 0 && (
+                  <span className="spanLikesList">{`${likes.length} ${
+                    likes.length === 1 ? "like" : "likes"
+                  }`}</span>
+                )
+              }
+            />
 
             <Icon
               name="comment outline"
