@@ -40,13 +40,14 @@ const CreatePost = ({ user, setPosts }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    
     let picUrl;
 
     if (media !== null) {
       picUrl = await uploadPic(media);
     }
 
-    if (!picUrl) {
+    if (media !== null && !picUrl) {
       setLoading(false);
       return setError("Error uploading image");
     }
@@ -55,8 +56,8 @@ const CreatePost = ({ user, setPosts }) => {
       newPost.text,
       newPost.location,
       picUrl,
-      setNewPost,
       setPosts,
+      setNewPost,
       setError
     );
 

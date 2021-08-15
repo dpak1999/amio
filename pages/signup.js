@@ -63,7 +63,7 @@ const Signup = () => {
 
     if (name === "media") {
       setMedia(files[0]);
-      setMediaPreview(URL.createObjectURL(files[0]));
+      return setMediaPreview(URL.createObjectURL(files[0]));
     }
     setUser((prev) => ({ ...prev, [name]: value }));
   };
@@ -78,10 +78,9 @@ const Signup = () => {
           cancel = canceler;
         }),
       });
-
-      if (errorMessage !== null) setErrorMessage(null);
-
+      
       if (res.data === "Username Available") {
+        if (errorMessage !== null) setErrorMessage(null);
         setUsernameAvailable(true);
         setUser((prev) => ({ ...prev, username }));
       }
