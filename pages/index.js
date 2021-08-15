@@ -22,15 +22,15 @@ const Index = ({ user, postsData, errorLoading }) => {
     showToastr && setTimeout(() => setShowToastr(false), 3000);
   }, [showToastr]);
 
-  if (posts.length === 0 || errorLoading) return <NoPosts />;
-
+ 
   return (
     <>
       {showToastr && <PostDeleteToastr />}
       <Segment>
         <CreatePost user={user} setPosts={setPosts} />
 
-        {posts.map((post) => (
+        {posts.length === 0 || errorLoading? <NoPosts />:
+        posts.map((post) => (
           <PostCard
             key={post.id}
             post={post}
@@ -39,6 +39,7 @@ const Index = ({ user, postsData, errorLoading }) => {
             setShowToastr={setShowToastr}
           />
         ))}
+
       </Segment>
     </>
   );
