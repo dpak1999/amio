@@ -61,7 +61,7 @@ router.post("/", async (req, res) => {
       res.status(401).send("Email is associated with another account");
     }
 
-    let user = await UserModel.findOne({ username: username.toLowerCase() });
+    user = await UserModel.findOne({ username: username.toLowerCase() });
 
     if (user) {
       res.status(401).send("Username already taken");

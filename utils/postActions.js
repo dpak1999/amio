@@ -38,3 +38,17 @@ export const deletePost = async (postId, setPosts, setShowToastr) => {
     console.error(error);
   }
 };
+
+export const likePost = async (postId, userId, setLikes, like = true) => {
+  try {
+    if (like) {
+      await Axios.post(`/like/${postId}`);
+      setLikes((prev) => [...prev, { user: userId }]);
+    } else if (!like) {
+      await Axios.put(`/unlike/${postId}`);
+      setLikes((prev) => prev.filter((like) => like.user !== userId));
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
