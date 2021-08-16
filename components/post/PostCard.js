@@ -165,7 +165,7 @@ const PostCard = ({ user, post, setPosts, setShowToastr }) => {
                 (comment, index) =>
                   index < 3 && (
                     <PostComments
-                      key={comment.id}
+                      key={comment._id}
                       comment={comment}
                       postId={post._id}
                       user={user}
