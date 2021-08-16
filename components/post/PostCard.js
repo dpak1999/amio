@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Card,
@@ -8,6 +8,7 @@ import {
   Header,
   Icon,
   Image,
+  Modal,
   Popup,
   Segment,
 } from "semantic-ui-react";
@@ -17,18 +18,48 @@ import CommentInputField from "./CommentInputField";
 import calculateTime from "../../utils/calculateTime";
 import { deletePost, likePost } from "../../utils/postActions";
 import LikesLIst from "./LikesLIst";
+import ImageModal from "./ImageModal";
+import NoImageModal from "./NoImageModal";
 
 const PostCard = ({ user, post, setPosts, setShowToastr }) => {
   const [likes, setLikes] = useState(post.likes);
   const [comments, setComments] = useState(post.comments);
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const isLiked =
     likes.length > 0 &&
     likes.filter((like) => like.user === user._id).length > 0;
 
+  const addPropsToModal = () => ({
+    post,
+    user,
+    setLikes,
+    likes,
+    isLiked,
+    comments,
+    setComments,
+  });
+
   return (
-    <div>
+    <>
+      {showModal && (
+        <Modal
+          onClose={() => setShowModal(false)}
+          open={showModal}
+          closeIcon
+          closeOnDimmerClick
+        >
+          <Modal.Content>
+            {post.picUrl ? (
+              <ImageModal {...addPropsToModal()} />
+            ) : (
+              <NoImageModal {...addPropsToModal()} />
+            )}
+          </Modal.Content>
+        </Modal>
+      )}
+
       <Segment basic>
         <Card fluid color="teal">
           {post.picUrl && (
@@ -39,6 +70,7 @@ const PostCard = ({ user, post, setPosts, setShowToastr }) => {
               floated="left"
               wrapped
               ui={false}
+              onClick={() => setShowModal(true)}
             />
           )}
 
@@ -143,7 +175,13 @@ const PostCard = ({ user, post, setPosts, setShowToastr }) => {
               )}
 
             {comments.length > 3 && (
-              <Button content="View more" color="teal" basic circular />
+              <Button
+                content="View more"
+                color="teal"
+                basic
+                circular
+                onClick={() => setShowModal(true)}
+              />
             )}
 
             <Divider hidden />
@@ -156,7 +194,7 @@ const PostCard = ({ user, post, setPosts, setShowToastr }) => {
           </Card.Content>
         </Card>
       </Segment>
-    </div>
+    </>
   );
 };
 
