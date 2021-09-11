@@ -2,12 +2,10 @@
 
 import { useState } from "react";
 import { Image, List, Popup } from "semantic-ui-react";
-import axios from "axios";
-import cookie from "js-cookie";
 import Link from "next/link";
-import baseUrl from "../../utils/baseUrl";
 import catchErrors from "../../utils/catchErrors";
 import { LikesPlaceHolder } from "../Layout/PlaceHolderGroup";
+import { Axios } from "../../utils/postActions";
 
 const LikesLIst = ({ postId, trigger }) => {
   const [likesList, setLikesList] = useState([]);
@@ -16,9 +14,7 @@ const LikesLIst = ({ postId, trigger }) => {
   const getLikesList = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${baseUrl}/api/post/like/${postId}`, {
-        headers: { Authorization: cookie.get("token") },
-      });
+      const res = await Axios.get(`/like/${postId}`);
       setLikesList(res.data);
       setLoading(false);
     } catch (error) {

@@ -5,7 +5,6 @@ import axios from "axios";
 import { Segment } from "semantic-ui-react";
 import { parseCookies } from "nookies";
 import InfiniteScroll from "react-infinite-scroll-component";
-import cookie from "js-cookie";
 import baseUrl from "../utils/baseUrl";
 import { NoPosts } from "../components/Layout/NoData";
 import CreatePost from "../components/post/Createpost";
@@ -15,6 +14,7 @@ import {
   EndMessage,
   PlaceHolderPosts,
 } from "../components/Layout/PlaceHolderGroup";
+import { Axios } from "../utils/postActions";
 
 const Index = ({ user, postsData, errorLoading }) => {
   const [posts, setPosts] = useState(postsData);
@@ -32,8 +32,8 @@ const Index = ({ user, postsData, errorLoading }) => {
 
   const fetchDataOnScroll = async () => {
     try {
-      const res = await axios.get(`${baseUrl}/api/post`, {
-        headers: { Authorization: cookie.get("token"), params: { pageNumber } },
+      const res = await Axios.get(`/`, {
+        params: { pageNumber },
       });
 
       if (res.data.length === 0) setHasMore(false);
@@ -63,7 +63,7 @@ const Index = ({ user, postsData, errorLoading }) => {
           >
             {posts.map((post) => (
               <PostCard
-                key={post.id}
+                key={post._id}
                 post={post}
                 user={user}
                 setPosts={setPosts}
