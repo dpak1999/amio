@@ -1,6 +1,7 @@
 /** @format */
 
 const express = require("express");
+const bcrypt = require("bcryptjs");
 const router = express.Router();
 const UserModel = require("../models/UserModel");
 const FollowerModel = require("../models/FollowerModel");
@@ -190,6 +191,87 @@ router.put("/unfollow/:userToUnfollowId", authMiddleware, async (req, res) => {
 
     await userToUnfollow.followers.splice(removeFollower);
     await userToUnfollow.save();
+
+    return res.status(200).send("Success");
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Server Error");
+  }
+});
+
+// update profile
+router.post("/update", authMiddleware, async (req, res) => {
+  try {
+    const { userId } = req;
+    const { bio, facebook, youtube, twitter, instagram, profilePicUrl } =
+      req.body.user;
+
+    let profileFields = {};
+    profileFields.user = userId;
+    profileFields.bio = bio;
+    profileFields.social = {};
+
+    if (facebook) profileFields.social.facebook = facebook;
+    if (youtube) profileFields.social.youtube = youtube;
+    if (twitter) profileFields.social.twitter = twitter;
+    if (instagram) profileFields.social.instagram = instagram;
+
+    await ProfileModel.findOneAndUpdate(
+      { user: userId },
+      { $set: profileFields },
+      { new: true }
+    );
+
+    if (profilePicUrl) {
+      const user = await UserModel.findById(userId);
+      user.profilePicUrl = profilePicUrl;
+      await user.save();
+    }
+
+    return res.status(200).send("Success");
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Server Error");
+  }
+});
+
+// update password
+router.post("/settings/password", authMiddleware, async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (newPassword.length < 6) {
+      return res.status(401).send("Password must be atleast 6 characters");
+    }
+
+    const user = await UserModel.findById(req.userId).select("+password");
+    const isPassword = await bcrypt.compare(currentPassword, user.password);
+    if (!isPassword) {
+      return res.status(401).send("Invalid password");
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    return res.status(200).send("Success");
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Server Error");
+  }
+});
+
+// update popup message settings
+router.post("/settings/messagePopup", authMiddleware, async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.userId);
+
+    if (user.newMessagePopup) {
+      user.newMessagePopup = false;
+      await user.save();
+    } else {
+      user.newMessagePopup = true;
+      await user.save();
+    }
 
     return res.status(200).send("Success");
   } catch (error) {
