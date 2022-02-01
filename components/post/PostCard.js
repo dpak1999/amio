@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Button,
   Card,
@@ -11,15 +11,15 @@ import {
   Modal,
   Popup,
   Segment,
-} from "semantic-ui-react";
-import Link from "next/link";
-import PostComments from "./PostComments";
-import CommentInputField from "./CommentInputField";
-import calculateTime from "../../utils/calculateTime";
-import { deletePost, likePost } from "../../utils/postActions";
-import LikesLIst from "./LikesLIst";
-import ImageModal from "./ImageModal";
-import NoImageModal from "./NoImageModal";
+} from 'semantic-ui-react';
+import Link from 'next/link';
+import PostComments from './PostComments';
+import CommentInputField from './CommentInputField';
+import calculateTime from '../../utils/calculateTime';
+import { deletePost, likePost } from '../../utils/postActions';
+import LikesLIst from './LikesLIst';
+import ImageModal from './ImageModal';
+import NoImageModal from './NoImageModal';
 
 const PostCard = ({ user, post, setPosts, setShowToastr }) => {
   const [likes, setLikes] = useState(post.likes);
@@ -66,7 +66,7 @@ const PostCard = ({ user, post, setPosts, setShowToastr }) => {
             <Image
               src={post.picUrl}
               alt="..."
-              style={{ cursor: "pointer" }}
+              style={{ cursor: 'pointer' }}
               floated="left"
               wrapped
               ui={false}
@@ -83,7 +83,7 @@ const PostCard = ({ user, post, setPosts, setShowToastr }) => {
               circular
             />
 
-            {(user.role === "root" || post.user._id === user._id) && (
+            {(user.role === 'root' || post.user._id === user._id) && (
               <>
                 <Popup
                   position="top right"
@@ -91,9 +91,10 @@ const PostCard = ({ user, post, setPosts, setShowToastr }) => {
                   trigger={
                     <Image
                       src="/deleteIcon.svg"
-                      style={{ cursor: "pointer" }}
+                      style={{ cursor: 'pointer' }}
                       size="mini"
                       floated="right"
+                      alt=""
                     />
                   }
                 >
@@ -124,9 +125,9 @@ const PostCard = ({ user, post, setPosts, setShowToastr }) => {
 
             <Card.Description
               style={{
-                fontSize: "17px",
-                letterSpacing: "0.1px",
-                wordSpacing: "0.35px",
+                fontSize: '17px',
+                letterSpacing: '0.1px',
+                wordSpacing: '0.35px',
               }}
             >
               {post.text}
@@ -135,9 +136,9 @@ const PostCard = ({ user, post, setPosts, setShowToastr }) => {
 
           <Card.Content extra>
             <Icon
-              name={isLiked ? "heart" : "heart outline"}
+              name={isLiked ? 'heart' : 'heart outline'}
               color="red"
-              style={{ cursor: "pointer" }}
+              style={{ cursor: 'pointer' }}
               onClick={() =>
                 likePost(post._id, user._id, setLikes, isLiked ? false : true)
               }
@@ -148,7 +149,7 @@ const PostCard = ({ user, post, setPosts, setShowToastr }) => {
               trigger={
                 likes.length > 0 && (
                   <span className="spanLikesList">{`${likes.length} ${
-                    likes.length === 1 ? "like" : "likes"
+                    likes.length === 1 ? 'like' : 'likes'
                   }`}</span>
                 )
               }
@@ -157,7 +158,7 @@ const PostCard = ({ user, post, setPosts, setShowToastr }) => {
             <Icon
               name="comment outline"
               color="blue"
-              style={{ marginLeft: "7px" }}
+              style={{ marginLeft: '7px' }}
             />
 
             {comments.length > 0 &&
