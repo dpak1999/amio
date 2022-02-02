@@ -33,11 +33,11 @@ const ProfilePage = ({
   const [loggedInUserFollowStats, setLoggedInUserFollowStats] =
     useState(userFollowerStats);
 
+  console.log('profile', profile);
+
   const ownAccount = profile.user._id === user._id;
 
   const handleItemClick = (item) => setActiveItem(item);
-
-  const setUserFollowStats = () => {};
 
   useEffect(() => {
     const getPosts = async () => {
@@ -120,7 +120,7 @@ const ProfilePage = ({
               <Followers
                 user={user}
                 loggedInUserFollowStats={loggedInUserFollowStats}
-                setUserFollowStats={setUserFollowStats}
+                setLoggedInUserFollowStats={setLoggedInUserFollowStats}
                 profileUserId={profile.user._id}
               />
             )}
@@ -129,7 +129,7 @@ const ProfilePage = ({
               <Following
                 user={user}
                 loggedInUserFollowStats={loggedInUserFollowStats}
-                setUserFollowStats={setUserFollowStats}
+                setLoggedInUserFollowStats={setLoggedInUserFollowStats}
                 profileUserId={profile.user._id}
               />
             )}
@@ -148,6 +148,7 @@ ProfilePage.getInitialProps = async (ctx) => {
     const res = await axios.get(`${baseUrl}/api/profile/${username}`, {
       headers: { Authorization: token },
     });
+    console.log(res);
     const { profile, followersLength, followingLength } = res.data;
 
     return { profile, followersLength, followingLength };

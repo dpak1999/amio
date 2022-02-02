@@ -5,13 +5,14 @@ import cookie from 'js-cookie';
 import React, { useEffect, useState } from 'react';
 import { Button, Image, List } from 'semantic-ui-react';
 import baseUrl from '../../utils/baseUrl';
+import { followUser, unfollowUser } from '../../utils/profileActions';
 import { NoFollowData } from '../Layout/NoData';
 import Spinner from '../Layout/Spinner';
 
 const Following = ({
   user,
   loggedInUserFollowStats,
-  setUserFollowStats,
+  setLoggedInUserFollowStats,
   profileUserId,
 }) => {
   const [following, setFollowing] = useState([]);
@@ -43,6 +44,8 @@ const Following = ({
         <Spinner />
       ) : following.length > 0 ? (
         following.map((profileFollowing) => {
+          console.log('profileFollowing', profileFollowing);
+
           const isFollowing =
             loggedInUserFollowStats.following.length > 0 &&
             loggedInUserFollowStats.following.filter(
@@ -64,6 +67,19 @@ const Following = ({
                         content={isFollowing ? 'Following' : 'Follow'}
                         icon={isFollowing ? 'check' : 'add user'}
                         disabled={followLoading}
+                        onClick={async () => {
+                          setFollowLoading(true);
+                          isFollowing
+                            ? await unfollowUser(
+                                profileFollowing.user._id,
+                                setLoggedInUserFollowStats
+                              )
+                            : await followUser(
+                                profileFollowing.user._id,
+                                setLoggedInUserFollowStats
+                              );
+                          setFollowLoading(false);
+                        }}
                       />
                     )}
                   </List.Content>
