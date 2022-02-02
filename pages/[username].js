@@ -13,6 +13,8 @@ import ProfileHeader from '../components/profile/ProfileHeader';
 import { PlaceHolderPosts } from '../components/Layout/PlaceHolderGroup';
 import PostCard from '../components/post/PostCard';
 import { PostDeleteToastr } from '../components/Layout/Toastr';
+import Followers from '../components/profile/Followers';
+import Following from '../components/profile/Following';
 
 const ProfilePage = ({
   profile,
@@ -34,6 +36,8 @@ const ProfilePage = ({
   const ownAccount = profile.user._id === user._id;
 
   const handleItemClick = (item) => setActiveItem(item);
+
+  const setUserFollowStats = () => {};
 
   useEffect(() => {
     const getPosts = async () => {
@@ -110,6 +114,24 @@ const ProfilePage = ({
                   <NoPosts />
                 )}
               </>
+            )}
+
+            {activeItem === 'followers' && (
+              <Followers
+                user={user}
+                loggedInUserFollowStats={loggedInUserFollowStats}
+                setUserFollowStats={setUserFollowStats}
+                profileUserId={profile.user._id}
+              />
+            )}
+
+            {activeItem === 'following' && (
+              <Following
+                user={user}
+                loggedInUserFollowStats={loggedInUserFollowStats}
+                setUserFollowStats={setUserFollowStats}
+                profileUserId={profile.user._id}
+              />
             )}
           </Grid.Column>
         </Grid.Row>
