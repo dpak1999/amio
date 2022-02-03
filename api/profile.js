@@ -138,10 +138,10 @@ router.post("/follow/:userToFollowId", authMiddleware, async (req, res) => {
       return res.status(401).send("Already following this user");
     }
 
-    await user.following.unshift({ user: userToFollowId });
+    user.following.unshift({ user: userToFollowId });
     await user.save();
 
-    await user.followers.unshift({ user: userId });
+    userToFollow.followers.unshift({ user: userId });
     await user.save();
 
     return res.status(200).send("Success");
@@ -186,10 +186,10 @@ router.put("/unfollow/:userToUnfollowId", authMiddleware, async (req, res) => {
       .map((follower) => follower.user.toString())
       .indexOf(userId);
 
-    await user.following.splice(removeFollowing, 1);
+    user.following.splice(removeFollowing, 1);
     await user.save();
 
-    await userToUnfollow.followers.splice(removeFollower);
+    userToUnfollow.followers.splice(removeFollower, 1);
     await userToUnfollow.save();
 
     return res.status(200).send("Success");
