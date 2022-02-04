@@ -142,7 +142,7 @@ router.post("/follow/:userToFollowId", authMiddleware, async (req, res) => {
     await user.save();
 
     userToFollow.followers.unshift({ user: userId });
-    await user.save();
+    await userToFollow.save();
 
     return res.status(200).send("Success");
   } catch (error) {
